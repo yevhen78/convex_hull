@@ -1,20 +1,34 @@
 import os
-from flask import Flask, make_response
+from flask import Flask, make_response, render_template
+from flask import request, redirect
+import urllib
 from convex_hull import *
 
 
 app = Flask(__name__)
 
-@app.route("/")
+
+@app.route('/')
 def get_hull():
+    return render_template('index.html')
+
+
+@app.route("/hull", methods = ['POST'])
+def hull():
 	import StringIO
 	import random
 	
 	from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 	from matplotlib.figure import Figure
-    
+
+	n = request.form['n']
+	try:
+		n = int(n)
+	except ValueError:
+		n=1000
+	
+	#n=100
     	# create hull
-	n = 1000
 	points = numpy.random.randn(n,2)
 	
 	(m,i) = minimum(points[:,1],compare)
@@ -52,10 +66,12 @@ def get_hull():
 	canvas=FigureCanvas(fig)
 	png_output = StringIO.StringIO()
 	canvas.print_png(png_output)
-	response=make_response(png_output.getvalue())
-	response.headers['Content-Type'] = 'image/png'
-	
-	return response
+	#response=make_response(png_output.getvalue())
+	#response.headers['Content-Type'] = 'image/png'
+	png_output = png_output.getvalue().encode("base64")
+	resp = [str(n),urllib.quote(png_output.rstrip('\n'))]
+	return render_template('index.html',resp = resp)
+
 	
 if __name__ == "__main__":
 	app.run()
