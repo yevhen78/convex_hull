@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Initial request</title>
+  </head>
+  <body>
+    <p>Enter number of points:</p>
+    <form action="/hull" method="post">
+      <input type="text" name="n"></input>
+      <input type="submit" value="submit"></input>
+    </form>
+    {% if resp %}
+      <!--	
+      <img class="decoded shrinkToFit" width="564" height="423" src = {{response}}></img>
+      -->
+      <p> Convex hull of {{resp[0]}} random points: </p>
+      <!--	
+      <img class="decoded shrinkToFit" width="564" height="423" src="data:image/png;base64,{{resp[1]}}"></img>
+      -->	
+    {% endif %}
+  </body>
+</html>
