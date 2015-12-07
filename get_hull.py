@@ -25,9 +25,11 @@ def hull():
 	try:
 		n = int(n)
 	except ValueError:
-		n=1000
+		n=100
 	
-	#n=100
+	if n<3 or n >100000:
+		n=100	
+	
     	# create hull
 	points = numpy.random.randn(n,2)
 	
